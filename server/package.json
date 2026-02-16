@@ -1,0 +1,25 @@
+{
+  "name": "stt-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Voice recognition WebSocket server for game",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@deepgram/sdk": "^4.11.3",
+    "@huggingface/transformers": "^3.4.0",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.18.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
