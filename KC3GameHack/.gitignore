@@ -1,0 +1,12 @@
+# Visual Studio files
+.vs/
+.vscode/
+*.sln
+*.vcxproj
+*.user
+
+# Unreal Engine files
+Binaries/
+Intermediate/
+DerivedDataCache/
+Saved/
