@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STT WebSocket テストクライアント</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: monospace; background: #1a1a2e; color: #eee; padding: 20px; }
+  h1 { font-size: 18px; margin-bottom: 16px; color: #8be9fd; }
+
+  .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  input[type="text"] {
+    background: #16213e; border: 1px solid #444; color: #eee;
+    padding: 8px 12px; border-radius: 4px; width: 360px; font-family: monospace;
+  }
+  button {
+    padding: 8px 20px; border: none; border-radius: 4px; cursor: pointer;
+    font-family: monospace; font-weight: bold; font-size: 14px;
+  }
+  #startBtn { background: #50fa7b; color: #000; }
+  #startBtn:disabled { background: #555; color: #888; cursor: not-allowed; }
+  #stopBtn { background: #ff5555; color: #fff; }
+  #stopBtn:disabled { background: #555; color: #888; cursor: not-allowed; }
+  .status { font-size: 13px; padding: 4px 10px; border-radius: 4px; }
+  .status.disconnected { background: #ff5555; color: #fff; }
+  .status.connected { background: #50fa7b; color: #000; }
+  .status.recording { background: #ffb86c; color: #000; }
+  .meter-container { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .meter { width: 100px; height: 12px; background: #16213e; border-radius: 2px; overflow: hidden; }
+  .meter-fill { height: 100%; background: #50fa7b; transition: width 50ms; width: 0%; }
+
+  .panels { display: flex; gap: 16px; height: calc(100vh - 120px); }
+  .panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .panel-title { font-size: 13px; color: #888; margin-bottom: 6px; }
+
+  #log {
+    background: #0a0a1a; border: 1px solid #333; border-radius: 4px;
+    padding: 12px; flex: 1; overflow-y: auto; font-size: 12px; line-height: 1.8;
+  }
+  .log-entry { border-bottom: 1px solid #1a1a2e; padding-bottom: 4px; margin-bottom: 4px; }
+  .log-interim { color: #888; }
+  .log-interim-effect { color: #ffb86c; }
+  .log-result { color: #50fa7b; }
+  .log-error { color: #ff5555; }
+  .log-system { color: #8be9fd; }
+  .log-time { color: #555; margin-right: 8px; }
+  .log-latency { color: #bd93f9; font-size: 11px; }
+  .log-tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    border-radius: 3px; margin-right: 6px; font-weight: bold;
+  }
+  .tag-interim { background: #444; color: #aaa; }
+  .tag-interim-effect { background: #44300a; color: #ffb86c; }
+  .tag-result { background: #0a3010; color: #50fa7b; }
+  .tag-error { background: #3a0a0a; color: #ff5555; }
+
+  /* スコアバーチャート */
+  #debugPanel {
+    background: #0a0a1a; border: 1px solid #333; border-radius: 4px;
+    padding: 12px; flex: 1; overflow-y: auto; font-size: 12px;
+  }
+  .debug-section { margin-bottom: 16px; }
+  .debug-header { color: #bd93f9; margin-bottom: 8px; font-size: 13px; }
+  .debug-stats { color: #888; margin-bottom: 8px; line-height: 1.6; }
+  .debug-stats span { color: #eee; }
+  .score-row { display: flex; align-items: center; margin-bottom: 3px; gap: 6px; }
+  .score-label { width: 110px; text-align: right; font-size: 11px; flex-shrink: 0; }
+  .score-bar-bg {
+    flex: 1; height: 16px; background: #16213e; border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .score-bar-fill { height: 100%; border-radius: 2px; transition: width 150ms; }
+  .score-bar-fill.passed { background: #50fa7b; }
+  .score-bar-fill.failed { background: #444; }
+  .score-threshold {
+    position: absolute; top: 0; bottom: 0; width: 2px; background: #ff5555;
+    z-index: 1;
+  }
+  .score-value { width: 50px; font-size: 11px; color: #aaa; flex-shrink: 0; }
+  .score-value.passed { color: #50fa7b; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>STT WebSocket Test Client</h1>
+
+<div class="controls">
+  <input type="text" id="wsUrl" value="ws://localhost:3001/ws/stt">
+  <button id="startBtn">Start</button>
+  <button id="stopBtn" disabled>Stop</button>
+  <span id="status" class="status disconnected">disconnected</span>
+  <div class="meter-container">
+    mic: <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
+</div>
+
+<div class="panels">
+  <div class="panel">
+    <div class="panel-title">Message Log</div>
+    <div id="log"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Classify Debug (latest)</div>
+    <div id="debugPanel">
+      <div style="color:#555; padding:20px; text-align:center;">Waiting for classification data...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TARGET_SAMPLE_RATE = 16000;
+const CHUNK_INTERVAL_MS = 200;
+// バーチャートの表示範囲 (コサイン類似度は0.8-1.0付近に集中する)
+const BAR_MIN = 0.80;
+const BAR_MAX = 1.00;
+
+let ws = null;
+let audioCtx = null;
+let mediaStream = null;
+let sendInterval = null;
+let pcmBuffer = [];
+let lastMsgTs = null; // 直前メッセージのサーバータイムスタンプ
+
+const logEl = document.getElementById('log');
+const debugPanel = document.getElementById('debugPanel');
+const statusEl = document.getElementById('status');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const wsUrlInput = document.getElementById('wsUrl');
+const meterFill = document.getElementById('meterFill');
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtTime() {
+  return new Date().toLocaleTimeString('ja-JP', { hour12: false, fractionalSecondDigits: 1 });
+}
+
+function log(tag, tagCls, text, textCls, latencyStr) {
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  let html = `<span class="log-time">${fmtTime()}</span>`;
+  html += `<span class="log-tag ${tagCls}">${tag}</span>`;
+  html += `<span class="${textCls}">${escapeHtml(text)}</span>`;
+  if (latencyStr) html += ` <span class="log-latency">${latencyStr}</span>`;
+  entry.innerHTML = html;
+  logEl.appendChild(entry);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function calcLatency(serverTs) {
+  const now = Date.now();
+  const delta = lastMsgTs ? (serverTs - lastMsgTs) : 0;
+  lastMsgTs = serverTs;
+  // サーバーとクライアントの時計差は無視 (同一マシン前提)、メッセージ間隔を表示
+  return delta > 0 ? `+${delta}ms` : '';
+}
+
+function setStatus(text, cls) {
+  statusEl.textContent = text;
+  statusEl.className = 'status ' + cls;
+}
+
+function renderDebug(debug, inputText, stage) {
+  if (!debug) return;
+  const { allScores, mean, std, threshold, classifyMs } = debug;
+
+  let html = `<div class="debug-section">`;
+  html += `<div class="debug-header">${escapeHtml(stage)}: "${escapeHtml(inputText)}"</div>`;
+  html += `<div class="debug-stats">`;
+  html += `classify: <span>${classifyMs.toFixed(1)}ms</span> &nbsp; `;
+  html += `mean: <span>${mean.toFixed(4)}</span> &nbsp; `;
+  html += `std: <span>${std.toFixed(4)}</span> &nbsp; `;
+  html += `threshold: <span style="color:#ff5555">${threshold.toFixed(4)}</span>`;
+  html += `</div>`;
+
+  // バーチャート
+  for (const s of allScores) {
+    const pct = Math.max(0, Math.min(100, (s.similarity - BAR_MIN) / (BAR_MAX - BAR_MIN) * 100));
+    const thPct = Math.max(0, Math.min(100, (threshold - BAR_MIN) / (BAR_MAX - BAR_MIN) * 100));
+    const passedCls = s.passed ? 'passed' : 'failed';
+    const valueCls = s.passed ? 'score-value passed' : 'score-value';
+
+    html += `<div class="score-row">`;
+    html += `<div class="score-label" style="color:${s.passed ? '#50fa7b' : '#666'}">${s.effect}</div>`;
+    html += `<div class="score-bar-bg">`;
+    html += `<div class="score-bar-fill ${passedCls}" style="width:${pct}%"></div>`;
+    html += `<div class="score-threshold" style="left:${thPct}%"></div>`;
+    html += `</div>`;
+    html += `<div class="${valueCls}">${s.similarity.toFixed(4)}</div>`;
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+  debugPanel.innerHTML = html;
+}
+
+// Float32 → Int16 PCM
+function float32ToInt16(f32) {
+  const i16 = new Int16Array(f32.length);
+  for (let i = 0; i < f32.length; i++) {
+    const s = Math.max(-1, Math.min(1, f32[i]));
+    i16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+  }
+  return i16;
+}
+
+// ダウンサンプリング
+function downsample(buf, from, to) {
+  if (from === to) return buf;
+  const ratio = from / to;
+  const len = Math.floor(buf.length / ratio);
+  const out = new Float32Array(len);
+  for (let i = 0; i < len; i++) {
+    const idx = i * ratio;
+    const lo = Math.floor(idx);
+    const hi = Math.min(lo + 1, buf.length - 1);
+    const frac = idx - lo;
+    out[i] = buf[lo] * (1 - frac) + buf[hi] * frac;
+  }
+  return out;
+}
+
+async function start() {
+  startBtn.disabled = true;
+  lastMsgTs = null;
+
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 1, sampleRate: { ideal: TARGET_SAMPLE_RATE } }
+    });
+    audioCtx = new AudioContext();
+    const source = audioCtx.createMediaStreamSource(mediaStream);
+    const browserRate = audioCtx.sampleRate;
+    log('SYS', 'tag-interim', `Audio: ${browserRate}Hz → ${TARGET_SAMPLE_RATE}Hz PCM16`, 'log-system', '');
+
+    const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+    processor.onaudioprocess = (e) => {
+      const input = e.inputBuffer.getChannelData(0);
+      let sum = 0;
+      for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
+      meterFill.style.width = Math.min(100, Math.sqrt(sum / input.length) * 500) + '%';
+
+      const downsampled = downsample(input, browserRate, TARGET_SAMPLE_RATE);
+      pcmBuffer.push(float32ToInt16(downsampled));
+    };
+    source.connect(processor);
+    processor.connect(audioCtx.destination);
+
+    const url = wsUrlInput.value.trim();
+    log('SYS', 'tag-interim', `Connecting to ${url}`, 'log-system', '');
+    ws = new WebSocket(url);
+    ws.binaryType = 'arraybuffer';
+
+    ws.onopen = () => {
+      setStatus('connected', 'connected');
+      log('SYS', 'tag-interim', 'WebSocket connected', 'log-system', '');
+
+      sendInterval = setInterval(() => {
+        if (ws && ws.readyState === WebSocket.OPEN && pcmBuffer.length > 0) {
+          const chunks = pcmBuffer.splice(0);
+          const totalLen = chunks.reduce((s, c) => s + c.byteLength, 0);
+          const merged = new Uint8Array(totalLen);
+          let off = 0;
+          for (const c of chunks) { merged.set(new Uint8Array(c.buffer), off); off += c.byteLength; }
+          ws.send(merged.buffer);
+        }
+      }, CHUNK_INTERVAL_MS);
+
+      stopBtn.disabled = false;
+      setStatus('recording', 'recording');
+    };
+
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      const lat = msg.ts ? calcLatency(msg.ts) : '';
+
+      switch (msg.type) {
+        case 'connected':
+          log('SYS', 'tag-interim', msg.message, 'log-system', lat);
+          break;
+
+        case 'interim':
+          log('INTERIM', 'tag-interim', msg.text, 'log-interim', lat);
+          break;
+
+        case 'result': {
+          const d = msg.data;
+          const ms = msg.debug ? ` classify:${msg.debug.classifyMs.toFixed(0)}ms` : '';
+          log('RESULT', 'tag-result',
+            `"${d.text}" intensity=${d.voiceIntensity} effects=[${d.effects.join(', ')}]${ms}`,
+            'log-result', lat);
+          if (msg.debug) renderDebug(msg.debug, d.text, 'result');
+          break;
+        }
+
+        case 'error':
+          log('ERROR', 'tag-error', msg.message, 'log-error', lat);
+          break;
+      }
+    };
+
+    ws.onerror = () => log('ERROR', 'tag-error', 'WebSocket error', 'log-error', '');
+    ws.onclose = (e) => {
+      log('SYS', 'tag-interim', `WebSocket closed (code=${e.code})`, 'log-system', '');
+      setStatus('disconnected', 'disconnected');
+    };
+
+  } catch (err) {
+    log('ERROR', 'tag-error', err.message, 'log-error', '');
+    startBtn.disabled = false;
+  }
+}
+
+function stop() {
+  stopBtn.disabled = true;
+  if (sendInterval) { clearInterval(sendInterval); sendInterval = null; }
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'control', action: 'stop' }));
+    ws.close();
+  }
+  ws = null;
+  if (audioCtx) { audioCtx.close(); audioCtx = null; }
+  if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+  pcmBuffer = [];
+  meterFill.style.width = '0%';
+  setStatus('disconnected', 'disconnected');
+  log('SYS', 'tag-interim', 'Stopped', 'log-system', '');
+  startBtn.disabled = false;
+}
+
+startBtn.addEventListener('click', start);
+stopBtn.addEventListener('click', stop);
+</script>
+</body>
+</html>
