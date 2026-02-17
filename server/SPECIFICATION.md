@@ -55,10 +55,27 @@ COLD centroid = normalize(mean(embed("冷たい"), embed("凍りそう"), embed(
 ```
 
 **ランタイム (各発話)**:
-1. 入力テキストの埋め込みを計算 (~50-100ms)
+1. 入力テキストの埋め込みを計算 (~15-60ms)
 2. 全 EffectType centroid とのコサイン類似度を計算 (<1ms)
-3. 閾値 (threshold=0.5) 以上の効果を抽出
+3. 動的閾値による外れ値検出で効果を抽出
 4. 排他ペアは信頼度 (similarity score) が高い方を採用
+
+### 動的閾値 (統計的外れ値検出)
+
+固定閾値ではなく、入力ごとに全centroidとの類似度分布から動的に閾値を算出する。
+多言語 Embedding モデルでは日本語テキスト同士のベースライン類似度が高い (0.85-0.90) ため、固定閾値では無関係なテキストでも全属性がヒットしてしまう。
+
+```
+threshold = mean + max(z × σ, minGap)
+```
+
+| パラメータ | デフォルト | 説明 |
+|-----------|-----------|------|
+| `z` | 1.5 | 平均から何σ以上のスコアを採用するか |
+| `minGap` | 0.03 | 平均との最低差分。σが小さい (= 全属性に均等に類似) 場合に全棄却する |
+
+- 「こんにちは」→ 全属性 ~0.89, σ≈0.007 → threshold ≈ 0.92 → 何もヒットしない
+- 「燃えろ」→ heat=0.95, 他 ~0.87, σ≈0.03 → threshold ≈ 0.915 → heat のみヒット
 
 ### 排他制御 (信頼度ベース)
 
@@ -71,17 +88,19 @@ COLD centroid = normalize(mean(embed("冷たい"), embed("凍りそう"), embed(
 - 両方が閾値を超えた場合 → similarity score が高い方のみ採用
 - 排他でないもの (例: `heat` + `bounce`) は併用 OK
 
-## 逐次処理パイプライン
+## 処理パイプライン
 
 ```
-[interim text] ─→ debounce 150ms ─→ embedding計算 ─→ interim_effect送信(暫定)
-[is_final text] ─→ 即座にembedding計算 ─→ セグメント結果を蓄積
-[speech_final]  ─→ 蓄積したis_finalセグメントを結合 ─→ 最終判定 ─→ result送信
+[interim text]  ──→ テキスト転送のみ (分類しない)
+[is_final text] ──→ 確定セグメントを蓄積 (分類しない)
+[speech_final]  ──→ 全セグメント結合 → 1回だけ classify → result 送信
 ```
 
-- **interim段階**: debounce して最新の interim テキストを分類し、暫定的な effects をクライアントに送信。ゲーム側で先行エフェクト表示が可能
-- **is_final段階**: 確定セグメントを即座に分類、結果を蓄積。speech_final を待たずに処理開始
-- **speech_final**: 全セグメントを集約し、最終的な WordDefinition を返却
+- **interim**: Deepgram の中間認識結果をそのままクライアントに転送。ゲーム側でテキストプレビュー表示に利用
+- **is_final**: 確定したセグメントを蓄積するだけ。分類は行わない
+- **speech_final**: 蓄積した全セグメントを結合し、1回だけ Embedding 分類を実行。テキスト・属性・音声強度をまとめて `result` として送信
+
+属性判定はテキスト確定後に意味を持つため (ゲーム側の描画がテキスト+属性のセットで動作する)、speech_final 時の1回で十分。分類は ~15-60ms なので遅延は無視できる。
 
 ## WebSocket プロトコル
 
@@ -116,17 +135,29 @@ ws://<host>/ws/stt
 
 ### サーバー → クライアント
 
-#### 1. 暫定効果 (interim段階で送信、変更される可能性あり)
+#### 1. 接続確立
 
 ```json
 {
-  "type": "interim_effect",
-  "text": "あつい燃え",
-  "effects": [{ "effect": "heat", "confidence": 0.82 }]
+  "type": "connected",
+  "message": "STT session started",
+  "ts": 1708156800000
 }
 ```
 
-#### 2. 認識結果 (speech_final 時に送信)
+#### 2. 中間テキスト (リアルタイム)
+
+```json
+{
+  "type": "interim",
+  "text": "あつ",
+  "ts": 1708156801000
+}
+```
+
+#### 3. 認識結果 (speech_final 時に送信)
+
+テキスト・属性判定・音声強度が確定した最終結果。
 
 ```json
 {
@@ -136,36 +167,34 @@ ws://<host>/ws/stt
     "text": "熱い燃えろ",
     "voiceIntensity": 72,
     "effects": ["heat"]
-  }
+  },
+  "debug": {
+    "allScores": [
+      { "effect": "heat", "similarity": 0.9523, "passed": true },
+      { "effect": "cold", "similarity": 0.8701, "passed": false }
+    ],
+    "mean": 0.8834,
+    "std": 0.0287,
+    "threshold": 0.9265,
+    "classifyMs": 42.3
+  },
+  "ts": 1708156802000
 }
 ```
 
-#### 3. 中間テキスト (リアルタイム)
-
-```json
-{
-  "type": "interim",
-  "text": "あつ"
-}
-```
+`debug` フィールドは開発時の分類パラメータ確認用。全centroidとのスコア分布、動的閾値、分類所要時間を含む。
 
 #### 4. エラー
 
 ```json
 {
   "type": "error",
-  "message": "Deepgram connection failed"
+  "message": "Deepgram connection failed",
+  "ts": 1708156803000
 }
 ```
 
-#### 5. 接続確立
-
-```json
-{
-  "type": "connected",
-  "message": "STT session started"
-}
-```
+全メッセージに `ts` (サーバー側 Unix タイムスタンプ ms) を付与。クライアント側でメッセージ間隔の計測に利用。
 
 ## データ型定義
 
@@ -186,15 +215,6 @@ enum EffectType {
   MASS_LIGHT = "mass_light",
   SPEED_FAST = "speed_fast",
   SPEED_SLOW = "speed_slow",
-}
-```
-
-### EffectConfidence
-
-```typescript
-interface EffectConfidence {
-  effect: EffectType;
-  confidence: number; // コサイン類似度 (0.0 - 1.0)
 }
 ```
 
@@ -224,7 +244,7 @@ interface WordDefinition {
 - WebSocket による常時接続で TCP ハンドシェイクを省略
 - Deepgram のストリーミング API でリアルタイム認識（バッチ処理ではない）
 - `endpointing: 300` (300ms の無音で発話区切りを検出) により低遅延で結果を返却
-- Embedding 推論は ~50-100ms/文 で十分高速
+- Embedding 分類は speech_final 時に1回のみ実行、~15-60ms で遅延は無視できる
 
 ### 接続管理
 
@@ -241,6 +261,7 @@ interface WordDefinition {
 ### エラーハンドリング
 
 - Deepgram 接続エラー時はクライアントに `error` メッセージを送信
+- 分類エラー時は effects を空配列にして result を返却 (テキストは失わない)
 - 自動再接続は行わない（ゲームのセッション単位で管理するため）
 
 ## ディレクトリ構成
@@ -249,13 +270,14 @@ interface WordDefinition {
 server/
 ├── src/
 │   ├── index.ts              # エントリポイント (HTTP + WebSocket)
-│   ├── ws-handler.ts         # WebSocket 接続ハンドラ (逐次処理パイプライン)
+│   ├── ws-handler.ts         # WebSocket 接続ハンドラ
 │   ├── deepgram-client.ts    # Deepgram STT クライアント
-│   ├── effect-classifier.ts  # Embedding ベース属性判定
+│   ├── effect-classifier.ts  # Embedding ベース属性判定 (動的閾値)
 │   ├── audio-analyzer.ts     # 音声強度 (RMS) 計算
 │   └── types.ts              # 型定義
 ├── Dockerfile
 ├── docker-compose.yml
+├── test-client.html          # ブラウザ用テストクライアント
 ├── package.json
 ├── tsconfig.json
 ├── .env.example
@@ -310,6 +332,13 @@ docker compose up -d
 
 - app の healthcheck が通ってから ngrok が起動する (モデルロード完了を待つ)
 - 公開 URL は `http://localhost:4040` または `curl http://localhost:4040/api/tunnels` で確認
+
+### テスト
+
+`test-client.html` をブラウザで開き、Start ボタンを押してマイクで発話する。
+
+- 左パネル: メッセージログ (INTERIM / RESULT + メッセージ間隔)
+- 右パネル: 分類デバッグ (全属性スコアバーチャート、動的閾値ライン、分類所要時間)
 
 ### 接続先の使い分け
 
