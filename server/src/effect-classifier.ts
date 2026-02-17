@@ -1,8 +1,10 @@
 import { pipeline } from "@huggingface/transformers";
-import { EffectType, type EffectConfidence } from "./types.js";
+import { EffectType, type ClassifyResult } from "./types.js";
 
 const MODEL_NAME = "Xenova/multilingual-e5-small";
-const DEFAULT_THRESHOLD = 0.5;
+// 統計的外れ値検出のパラメータ
+const DEFAULT_Z_THRESHOLD = 1.5; // 平均から何σ以上離れたスコアを採用するか
+const DEFAULT_MIN_GAP = 0.03;    // 平均との最低差分 (σが小さい=全部似てる場合に全棄却する)
 
 // 各EffectTypeの代表フレーズ
 const EFFECT_PHRASES: Record<EffectType, string[]> = {
@@ -122,10 +124,12 @@ const EXCLUSIVE_PAIRS: [EffectType, EffectType][] = [
 export class EffectClassifier {
   private extractor: any = null;
   private centroids = new Map<EffectType, Float32Array>();
-  private threshold: number;
+  private zThreshold: number;
+  private minGap: number;
 
-  constructor(threshold = DEFAULT_THRESHOLD) {
-    this.threshold = threshold;
+  constructor(zThreshold = DEFAULT_Z_THRESHOLD, minGap = DEFAULT_MIN_GAP) {
+    this.zThreshold = zThreshold;
+    this.minGap = minGap;
   }
 
   async initialize(): Promise<void> {
@@ -146,24 +150,62 @@ export class EffectClassifier {
     console.log("[EffectClassifier] Centroids computed. Ready.");
   }
 
-  async classify(text: string): Promise<EffectConfidence[]> {
+  async classify(text: string): Promise<ClassifyResult> {
+    const startMs = performance.now();
     const embedding = await this.embed(text);
-    const results: EffectConfidence[] = [];
 
+    // 全centroidとの類似度を計算
+    const rawScores: { effect: EffectType; similarity: number }[] = [];
     for (const [effectType, centroid] of this.centroids) {
-      const similarity = this.cosineSimilarity(embedding, centroid);
-      if (similarity >= this.threshold) {
-        results.push({ effect: effectType, confidence: similarity });
-      }
+      rawScores.push({
+        effect: effectType,
+        similarity: this.cosineSimilarity(embedding, centroid),
+      });
     }
 
-    results.sort((a, b) => b.confidence - a.confidence);
-    return this.applyExclusivePairs(results);
+    // 平均と標準偏差を計算
+    const sims = rawScores.map((s) => s.similarity);
+    const mean = sims.reduce((a, b) => a + b, 0) / sims.length;
+    const variance =
+      sims.reduce((a, b) => a + (b - mean) ** 2, 0) / sims.length;
+    const std = Math.sqrt(variance);
+
+    // 動的閾値: 平均 + max(z * σ, minGap)
+    const dynamicThreshold =
+      mean + Math.max(this.zThreshold * std, this.minGap);
+
+    // スコア降順ソート
+    rawScores.sort((a, b) => b.similarity - a.similarity);
+
+    const allScores = rawScores.map((s) => ({
+      effect: s.effect,
+      similarity: s.similarity,
+      passed: s.similarity > dynamicThreshold,
+    }));
+
+    let effects = rawScores
+      .filter((s) => s.similarity > dynamicThreshold)
+      .map((s) => ({ effect: s.effect, confidence: s.similarity }));
+
+    effects = this.applyExclusivePairs(effects);
+
+    const classifyMs = performance.now() - startMs;
+
+    return {
+      effects,
+      debug: {
+        allScores,
+        mean,
+        std,
+        threshold: dynamicThreshold,
+        classifyMs,
+      },
+    };
   }
 
   private applyExclusivePairs(
-    results: EffectConfidence[],
-  ): EffectConfidence[] {
+    results: { effect: EffectType; confidence: number }[],
+  ): { effect: EffectType; confidence: number }[] {
     const excluded = new Set<EffectType>();
 
     for (const [a, b] of EXCLUSIVE_PAIRS) {
@@ -220,7 +262,6 @@ export class EffectClassifier {
   }
 
   private cosineSimilarity(a: Float32Array, b: Float32Array): number {
-    // 両ベクトルは正規化済みなので、内積 = コサイン類似度
     let dot = 0;
     for (let i = 0; i < a.length; i++) {
       dot += a[i] * b[i];

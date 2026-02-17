@@ -6,18 +6,14 @@ import { AudioAnalyzer } from "./audio-analyzer.js";
 import type {
   ControlMessage,
   ServerMessage,
-  EffectConfidence,
   EffectType,
+  ClassifyDebug,
 } from "./types.js";
-
-const INTERIM_DEBOUNCE_MS = 150;
 
 interface SessionState {
   deepgram: DeepgramSTTClient;
   audioAnalyzer: AudioAnalyzer;
   finalSegments: string[];
-  finalEffects: EffectConfidence[];
-  interimDebounceTimer: ReturnType<typeof setTimeout> | null;
 }
 
 export function handleWebSocket(
@@ -35,8 +31,6 @@ export function handleWebSocket(
     }),
     audioAnalyzer: new AudioAnalyzer(),
     finalSegments: [],
-    finalEffects: [],
-    interimDebounceTimer: null,
   };
 
   const send = (msg: ServerMessage) => {
@@ -47,87 +41,66 @@ export function handleWebSocket(
 
   state.deepgram.connect({
     onOpen: () => {
-      send({ type: "connected", message: "STT session started" });
+      send({ type: "connected", message: "STT session started", ts: Date.now() });
     },
 
     onTranscript: async (result) => {
       const { transcript, isFinal, speechFinal } = result;
 
-      if (!isFinal && !speechFinal) {
-        // --- interim段階: debounce して暫定効果を送信 ---
-        send({ type: "interim", text: transcript });
-
-        if (state.interimDebounceTimer) {
-          clearTimeout(state.interimDebounceTimer);
-        }
-
-        state.interimDebounceTimer = setTimeout(async () => {
-          try {
-            const effects = await classifier.classify(transcript);
-            if (effects.length > 0) {
-              send({ type: "interim_effect", text: transcript, effects });
-            }
-          } catch (err) {
-            console.error("[ws-handler] interim classify error:", err);
-          }
-        }, INTERIM_DEBOUNCE_MS);
+      if (!isFinal) {
+        // interim: テキスト転送のみ
+        send({ type: "interim", text: transcript, ts: Date.now() });
       }
 
       if (isFinal) {
-        // --- is_final段階: 確定セグメントを即座に分類、蓄積 ---
+        // is_final: 確定セグメントを蓄積
         state.finalSegments.push(transcript);
-
-        try {
-          const effects = await classifier.classify(transcript);
-          for (const e of effects) {
-            const existing = state.finalEffects.find(
-              (f) => f.effect === e.effect,
-            );
-            if (!existing) {
-              state.finalEffects.push(e);
-            } else if (e.confidence > existing.confidence) {
-              existing.confidence = e.confidence;
-            }
-          }
-        } catch (err) {
-          console.error("[ws-handler] is_final classify error:", err);
-        }
       }
 
       if (speechFinal) {
-        // --- speech_final段階: 蓄積した結果を集約して最終判定 ---
-        if (state.interimDebounceTimer) {
-          clearTimeout(state.interimDebounceTimer);
-          state.interimDebounceTimer = null;
-        }
-
+        // speech_final: 全セグメント結合 → 1回だけ分類 → result送信
         const fullText = state.finalSegments.join("");
         const intensity = state.audioAnalyzer.getIntensity();
-        const effectTypes: EffectType[] = state.finalEffects.map(
-          (e) => e.effect,
-        );
 
         if (fullText.length > 0) {
-          send({
-            type: "result",
-            data: {
-              id: uuidv4(),
-              text: fullText,
-              voiceIntensity: intensity,
-              effects: effectTypes,
-            },
-          });
+          try {
+            const { effects, debug } = await classifier.classify(fullText);
+            const effectTypes: EffectType[] = effects.map((e) => e.effect);
+
+            send({
+              type: "result",
+              data: {
+                id: uuidv4(),
+                text: fullText,
+                voiceIntensity: intensity,
+                effects: effectTypes,
+              },
+              debug,
+              ts: Date.now(),
+            });
+          } catch (err) {
+            console.error("[ws-handler] classify error:", err);
+            send({
+              type: "result",
+              data: {
+                id: uuidv4(),
+                text: fullText,
+                voiceIntensity: intensity,
+                effects: [],
+              },
+              ts: Date.now(),
+            });
+          }
         }
 
         // リセット
         state.finalSegments = [];
-        state.finalEffects = [];
         state.audioAnalyzer.reset();
       }
     },
 
     onError: (error) => {
-      send({ type: "error", message: error.message });
+      send({ type: "error", message: error.message, ts: Date.now() });
     },
 
     onClose: () => {
@@ -153,9 +126,6 @@ export function handleWebSocket(
   });
 
   ws.on("close", () => {
-    if (state.interimDebounceTimer) {
-      clearTimeout(state.interimDebounceTimer);
-    }
     state.deepgram.close();
     console.log("[ws-handler] Client disconnected");
   });

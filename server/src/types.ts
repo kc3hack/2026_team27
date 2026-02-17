@@ -19,6 +19,25 @@ export interface EffectConfidence {
   confidence: number;
 }
 
+export interface EffectScore {
+  effect: string;
+  similarity: number;
+  passed: boolean;
+}
+
+export interface ClassifyDebug {
+  allScores: EffectScore[];
+  mean: number;
+  std: number;
+  threshold: number;
+  classifyMs: number;
+}
+
+export interface ClassifyResult {
+  effects: EffectConfidence[];
+  debug: ClassifyDebug;
+}
+
 export interface WordDefinition {
   id: string;
   text: string;
@@ -28,11 +47,10 @@ export interface WordDefinition {
 
 // サーバー → クライアント メッセージ
 export type ServerMessage =
-  | { type: "connected"; message: string }
-  | { type: "result"; data: WordDefinition }
-  | { type: "interim"; text: string }
-  | { type: "interim_effect"; text: string; effects: EffectConfidence[] }
-  | { type: "error"; message: string };
+  | { type: "connected"; message: string; ts: number }
+  | { type: "result"; data: WordDefinition; debug?: ClassifyDebug; ts: number }
+  | { type: "interim"; text: string; ts: number }
+  | { type: "error"; message: string; ts: number };
 
 // クライアント → サーバー 制御メッセージ
 export interface ControlMessage {

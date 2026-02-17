@@ -18,7 +18,7 @@ services:
     image: ngrok/ngrok:latest
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-    command: http app:3001 --domain=${NGROK_DOMAIN} --log stdout
+    command: http app:3001 --url=${NGROK_DOMAIN} --log stdout
     ports:
       - "4040:4040"   # ngrok管理UI: http://localhost:4040
     depends_on:
