@@ -16,7 +16,7 @@ RUN mkdir -p data models
 
 # モデルを事前ダウンロードしてキャッシュに保存
 ENV HF_HOME=/app/.cache/huggingface
-RUN node -e "import('@huggingface/transformers').then(m => m.pipeline('feature-extraction', 'sirasagi62/ruri-v3-30m-ONNX', { dtype: 'q8' })).then(() => console.log('Model cached'))"
+RUN node -e "import('@huggingface/transformers').then(m => m.pipeline('feature-extraction', 'Akatuki25/fine-tuned-ruri-v3-30m-onnx', { dtype: 'fp32' })).then(() => console.log('Model cached'))"
 
 EXPOSE 3001
 

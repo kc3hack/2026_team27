@@ -1,46 +1,24 @@
-import { describe, it, before, after } from "node:test";
+import { describe, it, before } from "node:test";
 import assert from "node:assert/strict";
 import { EffectClassifier } from "../src/effect-classifier.js";
 import { EffectType } from "../src/types.js";
-import { existsSync, readFileSync, renameSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_PATH = join(__dirname, "..", "data", "training-data.json");
-const DATA_BAK = DATA_PATH + ".bak";
-const FT_DIR = join(__dirname, "..", "models", "fine-tuned-ruri-v3-30m-onnx");
-const FT_BAK = FT_DIR + ".bak";
+
+// モデル ID (effect-classifier.ts と同じ値)
+const BASE_MODEL = "sirasagi62/ruri-v3-30m-ONNX";
+const FT_MODEL = "Akatuki25/fine-tuned-ruri-v3-30m-onnx";
 
 const hasData = existsSync(DATA_PATH);
-const hasFtModel = existsSync(join(FT_DIR, "onnx"));
-console.log(`[test] artifacts: training-data=${hasData}, fine-tuned=${hasFtModel}`);
-
-// テスト中断時に .bak が残っていたら復元
-function restoreBackups() {
-  if (!existsSync(DATA_PATH) && existsSync(DATA_BAK)) renameSync(DATA_BAK, DATA_PATH);
-  if (!existsSync(FT_DIR) && existsSync(FT_BAK)) renameSync(FT_BAK, FT_DIR);
-}
-restoreBackups();
-
-/** fine-tuned モデルを退避して base model を強制する */
-function hideFt(): boolean {
-  const has = existsSync(join(FT_DIR, "onnx"));
-  if (has) renameSync(FT_DIR, FT_BAK);
-  return has;
-}
-function showFt() { if (existsSync(FT_BAK)) renameSync(FT_BAK, FT_DIR); }
-
-function hideData(): boolean {
-  const has = existsSync(DATA_PATH);
-  if (has) renameSync(DATA_PATH, DATA_BAK);
-  return has;
-}
-function showData() { if (existsSync(DATA_BAK)) renameSync(DATA_BAK, DATA_PATH); }
+console.log(`[test] artifacts: training-data=${hasData}`);
 
 // ================================================================
-// 検証 1: ruri-v3-30m-ONNX モデル動作確認
-//   fine-tuned の有無は問わず、現在のモデル設定で基本機能が動くか
+// 検証 1: fine-tuned モデル動作確認
+//   デフォルト設定（HF Hub fine-tuned）で基本機能が動くか
 // ================================================================
 
 describe("検証1: モデル動作確認", () => {
@@ -50,8 +28,6 @@ describe("検証1: モデル動作確認", () => {
     classifier = new EffectClassifier();
     await classifier.initialize();
   });
-
-  after(restoreBackups);
 
   it("classify が 10 属性のスコアを <100ms で返す", async () => {
     const r = await classifier.classify("テスト");
@@ -112,8 +88,6 @@ describe("検証2: 訓練データ品質", { skip: !hasData }, () => {
   let data: { examples: { text: string; label: string; is_positive: boolean }[] };
 
   before(() => {
-    restoreBackups();
-    assert.ok(existsSync(DATA_PATH), `${DATA_PATH} が存在する`);
     data = JSON.parse(readFileSync(DATA_PATH, "utf-8"));
   });
 
@@ -148,7 +122,7 @@ describe("検証2: 訓練データ品質", { skip: !hasData }, () => {
 
 // ================================================================
 // 検証 3: base model で exemplar 追加の効果
-//   fine-tuned モデルを退避し、base model のみで
+//   modelOverride で base model を指定し、
 //   EFFECT_PHRASES だけ vs training-data.json exemplar の差を測定
 // ================================================================
 
@@ -178,34 +152,30 @@ describe("検証3: exemplar 追加による分類改善 (base model)", { skip: !
   let enhHits: number;
 
   before(async () => {
-    restoreBackups();
-    // fine-tuned を退避 → base model のみで比較
-    hideFt();
-
-    // A: EFFECT_PHRASES のみ
-    hideData();
-    const baseCls = new EffectClassifier();
-    await baseCls.initialize();
-    baseHits = 0;
-    for (const [t, exp] of [...indirectCases, ...metaphorCases]) {
-      const r = await baseCls.classify(t);
-      if (r.effects.some((e) => e.effect === exp)) baseHits++;
+    // A: base model + EFFECT_PHRASES のみ（training-data なしで初期化するため DATA_PATH を一時退避）
+    const dataBak = DATA_PATH + ".bak";
+    existsSync(DATA_PATH) && (await import("fs")).renameSync(DATA_PATH, dataBak);
+    try {
+      const baseCls = new EffectClassifier({ modelOverride: BASE_MODEL });
+      await baseCls.initialize();
+      baseHits = 0;
+      for (const [t, exp] of [...indirectCases, ...metaphorCases]) {
+        const r = await baseCls.classify(t);
+        if (r.effects.some((e) => e.effect === exp)) baseHits++;
+      }
+    } finally {
+      existsSync(dataBak) && (await import("fs")).renameSync(dataBak, DATA_PATH);
     }
 
-    // B: training-data exemplar 込み
-    showData();
-    const enhCls = new EffectClassifier();
+    // B: base model + training-data exemplar 込み
+    const enhCls = new EffectClassifier({ modelOverride: BASE_MODEL });
     await enhCls.initialize();
     enhHits = 0;
     for (const [t, exp] of [...indirectCases, ...metaphorCases]) {
       const r = await enhCls.classify(t);
       if (r.effects.some((e) => e.effect === exp)) enhHits++;
     }
-
-    showFt();
   });
-
-  after(restoreBackups);
 
   it("exemplar 追加で recall が向上", () => {
     const total = indirectCases.length + metaphorCases.length;
@@ -234,52 +204,47 @@ describe("検証4: fine-tuned モデル汎化性能", () => {
     ["牛歩", EffectType.SPEED_SLOW], ["鈍い", EffectType.SPEED_SLOW],
   ];
 
-  const hasFinetuned = existsSync(join(FT_DIR, "onnx"));
   let baseHits: number;
   let ftHits: number;
   let details: string[] = [];
 
   before(async () => {
-    if (!hasFinetuned) return;
-    restoreBackups();
-
-    // base model (EFFECT_PHRASES のみ、training-data なし)
-    hideFt();
-    hideData();
-    const baseCls = new EffectClassifier();
-    await baseCls.initialize();
-    baseHits = 0;
-    for (const [t, exp] of unseenCases) {
-      const r = await baseCls.classify(t);
-      const hit = r.effects.some((e) => e.effect === exp);
-      if (hit) baseHits++;
-      details.push(`"${t}" (${exp}): base=${hit ? "o" : "x"}`);
+    // base model (EFFECT_PHRASES のみ — training-data 退避)
+    const dataBak = DATA_PATH + ".bak";
+    existsSync(DATA_PATH) && (await import("fs")).renameSync(DATA_PATH, dataBak);
+    try {
+      const baseCls = new EffectClassifier({ modelOverride: BASE_MODEL });
+      await baseCls.initialize();
+      baseHits = 0;
+      for (const [t, exp] of unseenCases) {
+        const r = await baseCls.classify(t);
+        const hit = r.effects.some((e) => e.effect === exp);
+        if (hit) baseHits++;
+        details.push(`"${t}" (${exp}): base=${hit ? "o" : "x"}`);
+      }
+    } finally {
+      existsSync(dataBak) && (await import("fs")).renameSync(dataBak, DATA_PATH);
     }
-    showData();
-    showFt();
 
-    // fine-tuned model (EFFECT_PHRASES のみ — exemplar 追加なし)
-    hideData();
-    const ftCls = new EffectClassifier();
-    await ftCls.initialize();
-    ftHits = 0;
-    for (let i = 0; i < unseenCases.length; i++) {
-      const [t, exp] = unseenCases[i];
-      const r = await ftCls.classify(t);
-      const hit = r.effects.some((e) => e.effect === exp);
-      if (hit) ftHits++;
-      details[i] += ` ft=${hit ? "o" : "x"}`;
+    // fine-tuned model (EFFECT_PHRASES のみ — training-data 退避)
+    existsSync(DATA_PATH) && (await import("fs")).renameSync(DATA_PATH, dataBak);
+    try {
+      const ftCls = new EffectClassifier({ modelOverride: FT_MODEL });
+      await ftCls.initialize();
+      ftHits = 0;
+      for (let i = 0; i < unseenCases.length; i++) {
+        const [t, exp] = unseenCases[i];
+        const r = await ftCls.classify(t);
+        const hit = r.effects.some((e) => e.effect === exp);
+        if (hit) ftHits++;
+        details[i] += ` ft=${hit ? "o" : "x"}`;
+      }
+    } finally {
+      existsSync(dataBak) && (await import("fs")).renameSync(dataBak, DATA_PATH);
     }
-    showData();
   });
 
-  after(restoreBackups);
-
-  it("fine-tuned モデルが存在する", () => {
-    assert.ok(hasFinetuned, "onnx/ ディレクトリ必要");
-  });
-
-  it("未知表現の recall 比較", { skip: !hasFinetuned }, () => {
+  it("未知表現の recall 比較", () => {
     const n = unseenCases.length;
     console.log(`    base: ${baseHits}/${n} (${(baseHits / n * 100).toFixed(1)}%) → ft: ${ftHits}/${n} (${(ftHits / n * 100).toFixed(1)}%)`);
     for (const d of details) console.log(`    ${d}`);

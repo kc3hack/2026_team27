@@ -9,6 +9,7 @@ const SERVER_ROOT = join(__dirname, "..");
 
 // モデル: 日本語特化 ruri-v3-30m (JMTEB 74.51, 256次元, 37Mパラメータ)
 const BASE_MODEL_NAME = "sirasagi62/ruri-v3-30m-ONNX";
+const FINE_TUNED_HF_MODEL = "Akatuki25/fine-tuned-ruri-v3-30m-onnx";
 const FINE_TUNED_MODEL_DIR = join(SERVER_ROOT, "models", "fine-tuned-ruri-v3-30m-onnx");
 const TRAINING_DATA_PATH = join(SERVER_ROOT, "data", "training-data.json");
 
@@ -153,17 +154,27 @@ export class EffectClassifier {
   private exemplars = new Map<EffectType, Exemplar[]>();
   private zThreshold: number;
   private minGap: number;
+  private modelOverride?: string;
 
-  constructor(zThreshold?: number, minGap?: number) {
+  constructor(options?: { zThreshold?: number; minGap?: number; modelOverride?: string }) {
     // 明示指定がなければ initialize() でモデル種別に応じて自動設定
-    this.zThreshold = zThreshold ?? BASE_Z_THRESHOLD;
-    this.minGap = minGap ?? BASE_MIN_GAP;
+    this.zThreshold = options?.zThreshold ?? BASE_Z_THRESHOLD;
+    this.minGap = options?.minGap ?? BASE_MIN_GAP;
+    this.modelOverride = options?.modelOverride;
   }
 
   async initialize(): Promise<void> {
-    // fine-tuned モデルがあればそちらを使用、なければベースモデルにフォールバック
-    const useFineTuned = existsSync(join(FINE_TUNED_MODEL_DIR, "onnx"));
-    const modelPath = useFineTuned ? FINE_TUNED_MODEL_DIR : BASE_MODEL_NAME;
+    // モデル解決: modelOverride > ローカル fine-tuned > HF Hub fine-tuned > base model
+    let modelPath: string;
+    let useFineTuned: boolean;
+    if (this.modelOverride) {
+      modelPath = this.modelOverride;
+      useFineTuned = modelPath !== BASE_MODEL_NAME;
+    } else {
+      const hasLocalFt = existsSync(join(FINE_TUNED_MODEL_DIR, "onnx"));
+      modelPath = hasLocalFt ? FINE_TUNED_MODEL_DIR : FINE_TUNED_HF_MODEL;
+      useFineTuned = true;
+    }
     console.log(`[EffectClassifier] Using ${useFineTuned ? "fine-tuned" : "base"} model: ${modelPath}`);
 
     // モデル種別に応じて閾値パラメータを自動設定 (コンストラクタで明示指定されていなければ)

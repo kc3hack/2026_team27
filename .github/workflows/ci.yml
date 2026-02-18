@@ -40,9 +40,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: hf-ruri-v3-30m-onnx
+          key: hf-models-${{ hashFiles('server/src/effect-classifier.ts') }}
+          restore-keys: hf-models-
       - run: npm ci
-      - name: Run tests (検証1 only, 検証2-4 skip without artifacts)
+      - name: Run tests
         run: npm test
 
   docker:
@@ -63,7 +64,7 @@ jobs:
       - name: Start container
         run: docker run -d --name stt-test -p 3001:3001 -e DEEPGRAM_API_KEY=dummy stt-server:test
       - name: Wait for healthcheck
-        run: curl --retry 12 --retry-delay 10 --retry-connrefused http://localhost:3001/health
+        run: curl --retry 12 --retry-delay 10 --retry-all-errors http://localhost:3001/health
       - name: Stop container
         if: always()
         run: docker stop stt-test || true
