@@ -12,6 +12,10 @@ const DATA_BAK = DATA_PATH + ".bak";
 const FT_DIR = join(__dirname, "..", "models", "fine-tuned-ruri-v3-30m-onnx");
 const FT_BAK = FT_DIR + ".bak";
 
+const hasData = existsSync(DATA_PATH);
+const hasFtModel = existsSync(join(FT_DIR, "onnx"));
+console.log(`[test] artifacts: training-data=${hasData}, fine-tuned=${hasFtModel}`);
+
 // テスト中断時に .bak が残っていたら復元
 function restoreBackups() {
   if (!existsSync(DATA_PATH) && existsSync(DATA_BAK)) renameSync(DATA_BAK, DATA_PATH);
@@ -104,7 +108,7 @@ describe("検証1: モデル動作確認", () => {
 // 検証 2: 訓練データ品質
 // ================================================================
 
-describe("検証2: 訓練データ品質", () => {
+describe("検証2: 訓練データ品質", { skip: !hasData }, () => {
   let data: { examples: { text: string; label: string; is_positive: boolean }[] };
 
   before(() => {
@@ -148,7 +152,7 @@ describe("検証2: 訓練データ品質", () => {
 //   EFFECT_PHRASES だけ vs training-data.json exemplar の差を測定
 // ================================================================
 
-describe("検証3: exemplar 追加による分類改善 (base model)", () => {
+describe("検証3: exemplar 追加による分類改善 (base model)", { skip: !hasData }, () => {
   const indirectCases: [string, EffectType][] = [
     ["太陽", EffectType.HEAT], ["溶岩", EffectType.HEAT], ["砂漠", EffectType.HEAT],
     ["北極", EffectType.COLD], ["吹雪", EffectType.COLD], ["氷河", EffectType.COLD],
