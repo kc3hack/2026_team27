@@ -1,0 +1,14 @@
+[project]
+name = "effect-classifier-training"
+version = "0.1.0"
+description = "SetFit fine-tuning pipeline for effect classifier"
+requires-python = ">=3.10"
+dependencies = [
+    "setfit>=1.0.0",
+    "sentence-transformers>=3.0.0",
+    "optimum[onnxruntime]>=1.19.0",
+    "torch>=2.0.0",
+    "onnx>=1.15.0",
+    "onnxruntime>=1.17.0",
+    "sentencepiece>=0.2.0",
+]
