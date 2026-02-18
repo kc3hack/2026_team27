@@ -1,0 +1,3609 @@
+{
+  "examples": [
+    {
+      "text": "熱い",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "暑い",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "あつい",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "あっつい",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "燃える",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "燃えろ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "炎",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "火",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ファイア",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ファイヤー",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "熱く",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "灼熱",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "太陽",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "溶岩",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "砂漠",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "マグマ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "火山",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "焚き火",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "真夏",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "灼ける",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "溶鉄",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "激辛",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "メラメラ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "カッカ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ボーボー",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ジリジリ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "チリチリ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "焼き尽くせ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "全部燃やせ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "灼熱の炎よ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "火を噴け",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "溶かしてやる",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "太陽みたいに熱くなれ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "マグマが噴き出す",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "冷たい",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "寒い",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "つめたい",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "凍る",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "凍れ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フリーズ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "氷",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "冷たく",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "氷みたいに冷たい",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "凍りそう",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "極寒",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "冷凍",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "北極",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "南極",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "吹雪",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "氷河",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "雪",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "冬",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "霜",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "氷山",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "冷蔵庫",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "ツンドラ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "カチコチ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "ブルブル",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "ヒンヤリ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "ガチガチ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "キーンと冷える",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "凍りつけ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "全部凍らせろ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "氷の世界にしろ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "吹雪で包め",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "冬将軍がやってくる",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "北極のように凍てつく",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "電気",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "雷",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "ビリビリ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "でんき",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "かみなり",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "サンダー",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "稲妻",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "雷が落ちる",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "放電",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "電撃",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "感電",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "電流",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "静電気",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "スパーク",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "落雷",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "雷鳴",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "プラズマ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "高圧電流",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "バチバチ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "パチパチ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "ビリッ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "バリバリ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "雷を落とせ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "電気を流せ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "しびれさせろ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "稲妻よ走れ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "感電させてやる",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "明るい",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "あかるい",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "光",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ひかり",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ライト",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "輝く",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "輝け",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "明るく",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "光り輝く",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ピカピカ光る",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "照らす",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "閃光",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "太陽光",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "蛍",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "星",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "発光",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "日光",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ネオン",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "レーザー",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "蛍光灯",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "キラキラ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ピカッ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ギラギラ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "チカチカ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "光で照らせ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "眩しくなれ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "闇を照らす光",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "全力で輝け",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "星のように光れ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "滑る",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "ツルツル",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "すべすべ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "すべる",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "滑れ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "つるつる滑る",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "滑りやすい",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "摩擦ゼロ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スケートリンク",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "石鹸",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "油",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "ワックス",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "潤滑",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "氷の床",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "ぬるぬる",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "ヌルヌル",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "ツルッ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スルスル",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スーッと滑る",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "全部ツルツルにしろ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "足元を滑らせろ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "氷の上みたいに滑れ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "摩擦をなくせ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "弾む",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "跳ねる",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ボヨンボヨン",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "はずむ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンド",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "弾め",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "跳ねろ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "弾力",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "反発",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "トランポリン",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ゴムボール",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "バネ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "スーパーボール",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ゴム",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "跳躍",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ポヨンポヨン",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ビヨーン",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ポンポン",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ボイン",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "もっと跳ねろ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "ゴムみたいに弾め",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "バネのように跳ね返れ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "トランポリンみたい",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "重い",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "おもい",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "重く",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "重くなれ",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ずっしり",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ヘビー",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ずっしり重い",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "重量",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "質量増加",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "鉄の塊",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "鉛",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "岩",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "鉄",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "アンカー",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "鋼鉄",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "巨石",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "重力",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ドスン",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ズシン",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ドスッ",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ガツン",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ズドン",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "鉄のように重くなれ",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "重力を上げろ",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "岩みたいに重くしろ",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "どんどん重くなる",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "軽い",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "かるい",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "軽く",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "軽くなれ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ふわふわ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "軽やか",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ふわふわ浮く",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "軽量",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "無重力",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "羽",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "風船",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "綿",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "羽毛",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "紙",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "シャボン玉",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "浮遊",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "空気みたい",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "フワリ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "フワフワ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ヒラヒラ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "スーッ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "羽のように軽くなれ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "風船みたいに浮け",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "重力から解放しろ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "空に浮かべ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "速い",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "はやい",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "速く",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "早い",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "早く",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スピード",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "加速",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "素早く動く",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "加速する",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "疾走",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "チーター",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "弾丸",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ロケット",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "光速",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "疾風",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "瞬足",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ダッシュ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "音速",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ビュン",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "シュッ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ピュー",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ヒュン",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "もっと速くなれ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "弾丸のように飛べ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "光の速さで駆け抜けろ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "全力ダッシュだ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "遅い",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "おそい",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "遅く",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "スロー",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ゆっくり",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "減速",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ゆっくり動く",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "減速する",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "徐行",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "カメ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "粘液",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "渋滞",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ナメクジ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "スローモーション",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "停滞",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "鈍足",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "泥沼",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ノロノロ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "トロトロ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "モタモタ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ダラダラ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "もっと遅くなれ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "カメみたいにのろくなれ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "時間を止めろ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "泥沼にはまれ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "こんにちは",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "こんにちは",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "ありがとう",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "やったー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "もう一回",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "頑張れ",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "おはよう",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "こんばんは",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "お疲れ様",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "よろしく",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "じゃあね",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "バイバイ",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "スタート",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "始めよう",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "リトライ",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "勝った",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "負けた",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "おしい",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "いいね",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "すごい",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "なるほど",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "了解",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "オッケー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "わかった",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "お腹すいた",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "眠い",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "疲れた",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "暇だ",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "何これ",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "どうしよう",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "うわー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "えー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "あー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "おー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "ふーん",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "へー",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "右",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "左",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "上",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "下",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "そこ",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "こっち",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "何時",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "どうやるの",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "次は何",
+      "label": "speed_slow",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "bounce",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "cold",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "electric",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "friction_reduce",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "heat",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "light",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "mass_heavy",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "mass_light",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "speed_fast",
+      "is_positive": false
+    },
+    {
+      "text": "もういい",
+      "label": "speed_slow",
+      "is_positive": false
+    }
+  ]
+}
