@@ -4,6 +4,7 @@
 #include "IWebSocket.h"
 #include "AudioCaptureCore.h"
 #include "Containers/Queue.h"
+#include <atomic>
 #include "MyAudioStreamer.generated.h"
 
 
@@ -80,6 +81,13 @@ private:
     // 直接マイクキャプチャ
     Audio::FAudioCapture AudioCapture;
     TQueue<TArray<uint8>> SendQueue;
+
+    // オーディオスレッド側でコールバック毎の小バッファを蓄積し、
+    // 一定量（~50ms分）溜まってからキューに投入してオーバーヘッドを削減
+    TArray<uint8> CaptureAccumulator; // オーディオスレッドからのみアクセス
+
+    // キュー深度の近似値（バイト数）。溜まりすぎたら古い音声を破棄しリアルタイム性を維持
+    std::atomic<int32> QueuedAudioBytes{0};
 
     // Deepgramが準備完了したか（サーバーから "connected" を受け取るまで音声送信しない）
     bool bServerReady = false;

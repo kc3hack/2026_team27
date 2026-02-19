@@ -93,17 +93,18 @@ void AMyAudioStreamer::BeginPlay()
     {
         if (bOverflow)
         {
-            UE_LOG(LogTemp, Warning, TEXT("[UE] Audio capture buffer overflow! Audio data may be lost."));
+            UE_LOG(LogTemp, Warning, TEXT("[UE] Audio capture buffer overflow!"));
         }
 
         // ダウンサンプリング: SampleRate → 16kHz, ステレオ → モノラル
         constexpr int32 TargetSampleRate = 16000;
         const int32 DownsampleRatio = FMath::Max(1, SampleRate / TargetSampleRate);
         const int32 OutputFrames = NumFrames / DownsampleRatio;
+        const int32 OutputBytes = OutputFrames * sizeof(int16);
 
-        TArray<uint8> Buffer;
-        Buffer.SetNumUninitialized(OutputFrames * sizeof(int16));
-        int16* PCM16 = reinterpret_cast<int16*>(Buffer.GetData());
+        // CaptureAccumulator に直接書き込み（コールバック毎のTArray生成を回避）
+        const int32 StartIndex = CaptureAccumulator.AddUninitialized(OutputBytes);
+        int16* PCM16 = reinterpret_cast<int16*>(CaptureAccumulator.GetData() + StartIndex);
 
         for (int32 i = 0; i < OutputFrames; ++i)
         {
@@ -118,15 +119,31 @@ void AMyAudioStreamer::BeginPlay()
             PCM16[i] = static_cast<int16>(Sample * 32767.0f);
         }
 
-        // ログは MoveTemp の前に出力（Move後はBufferが空になるため）
-        if (++CaptureCallbackCount % 100 == 0)
+        // 50ms分(1600B @ 16kHz mono 16bit)溜まったらキューに投入
+        // コールバック毎に320Bずつ個別Enqueueしていた状態を改善し、
+        // TQueue操作を~1/5に削減
+        constexpr int32 BatchBytes = 1600;
+        if (CaptureAccumulator.Num() >= BatchBytes)
         {
-            UE_LOG(LogTemp, Warning,
-                TEXT("[TIMING][UE] Capture callback #%d (NumFrames=%d OutputFrames=%d OutputBytes=%d SR=%d Ch=%d)"),
-                CaptureCallbackCount, NumFrames, OutputFrames, Buffer.Num(), SampleRate, NumChannels);
+            // キュー深度チェック: 500ms(16000B)を超えたら古い音声を破棄
+            // リアルタイム性を維持し、ゲームFPS低下時のバックログ蓄積を防止
+            constexpr int32 MaxQueueBytes = 16000;
+            if (QueuedAudioBytes.load(std::memory_order_relaxed) < MaxQueueBytes)
+            {
+                QueuedAudioBytes.fetch_add(CaptureAccumulator.Num(), std::memory_order_relaxed);
+                SendQueue.Enqueue(MoveTemp(CaptureAccumulator));
+            }
+            CaptureAccumulator.Reset();
+            CaptureAccumulator.Reserve(BatchBytes);
         }
 
-        SendQueue.Enqueue(MoveTemp(Buffer));
+        if (++CaptureCallbackCount % 200 == 0)
+        {
+            UE_LOG(LogTemp, Warning,
+                TEXT("[TIMING][UE] Capture #%d (Frames=%d Out=%dB QueueDepth~%dB)"),
+                CaptureCallbackCount, NumFrames, OutputBytes,
+                QueuedAudioBytes.load(std::memory_order_relaxed));
+        }
     };
 
     // 16kHzで十分だが、デバイスのネイティブレートでキャプチャ
@@ -155,15 +172,13 @@ void AMyAudioStreamer::Tick(float DeltaTime)
 
     if (!WebSocket.IsValid() || !WebSocket->IsConnected() || !bServerReady)
     {
-        // 未接続またはDeepgram未準備の間はキューを破棄（スタック防止）
         TArray<uint8> Discarded;
         while (SendQueue.Dequeue(Discarded)) {}
+        QueuedAudioBytes.store(0, std::memory_order_relaxed);
         return;
     }
 
-    // --- キューに溜まった全チャンクを1つのバッファに結合して1回で送信 ---
-    // 個別に Send() すると WebSocket フレーミング + TCP オーバーヘッドが
-    // チャンク数分かかり、リアルタイム比が崩壊する原因になる
+    // キューの全バッチを1つに結合して1回のWebSocket送信にまとめる
     TArray<uint8> CombinedBuffer;
     TArray<uint8> Buffer;
     int32 ChunksDequeued = 0;
@@ -172,6 +187,7 @@ void AMyAudioStreamer::Tick(float DeltaTime)
         CombinedBuffer.Append(Buffer);
         ++ChunksDequeued;
     }
+    QueuedAudioBytes.store(0, std::memory_order_relaxed);
 
     if (CombinedBuffer.Num() > 0)
     {
@@ -186,7 +202,7 @@ void AMyAudioStreamer::Tick(float DeltaTime)
         if (TickSendCount % 30 == 0)
         {
             UE_LOG(LogTemp, Warning,
-                TEXT("[TIMING][UE] Tick #%d: Combined %d chunks (%d bytes) into single send | DeltaTime=%.1fms"),
+                TEXT("[TIMING][UE] Tick #%d: %d batches (%d bytes) | DeltaTime=%.1fms"),
                 TickSendCount, ChunksDequeued, CombinedBuffer.Num(), DeltaTime * 1000.0f);
         }
     }
