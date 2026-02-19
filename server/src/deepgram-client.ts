@@ -52,6 +52,7 @@ export class DeepgramSTTClient {
 
     this.connection.on(LiveTranscriptionEvents.Transcript, (data: any) => {
       const transcript = data.channel?.alternatives?.[0]?.transcript ?? "";
+      console.log(`[Deepgram] Transcript event: "${transcript}" is_final=${data.is_final} speech_final=${data.speech_final}`);
       if (transcript === "") return;
 
       handlers.onTranscript({

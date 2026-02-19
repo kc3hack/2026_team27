@@ -108,7 +108,12 @@ export function handleWebSocket(
     },
   });
 
+  let msgCount = 0;
   ws.on("message", (data, isBinary) => {
+    msgCount++;
+    if (msgCount <= 5 || msgCount % 100 === 0) {
+      console.log(`[ws-handler] Message #${msgCount}: isBinary=${isBinary}, size=${(data as Buffer).length ?? 0}`);
+    }
     if (isBinary) {
       const buffer = Buffer.from(data as ArrayBuffer);
       state.audioAnalyzer.addChunk(buffer);
