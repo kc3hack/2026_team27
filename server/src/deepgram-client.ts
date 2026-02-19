@@ -38,7 +38,6 @@ export class DeepgramSTTClient {
       language: this.language,
       smart_format: true,
       interim_results: true,
-      utterance_end_ms: 1000,
       endpointing: 300,
       encoding: "linear16",
       sample_rate: 16000,
