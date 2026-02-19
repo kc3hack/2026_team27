@@ -89,7 +89,7 @@ private:
 
     // 計測用
     int32 CaptureCallbackCount = 0;
-    double LastEnqueueTimeMs = 0.0; // キャプチャスレッドが書き込み、Tickが読み取る（デバッグ用近似値）
+    int32 TickSendCount = 0;
 
     // サーバーの文字列をEnumに変換するヘルパー
     EEffectType StringToEffectType(FString EffectStr);

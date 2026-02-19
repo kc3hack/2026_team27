@@ -91,9 +91,12 @@ void AMyAudioStreamer::BeginPlay()
 
     Audio::FOnCaptureFunction OnCapture = [this](const float* FloatData, int32 NumFrames, int32 NumChannels, int32 SampleRate, double StreamTime, bool bOverflow)
     {
-        const double CallbackStartMs = FPlatformTime::Seconds() * 1000.0;
+        if (bOverflow)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("[UE] Audio capture buffer overflow! Audio data may be lost."));
+        }
 
-        // ダウンサンプリング: SampleRate → 16kHz
+        // ダウンサンプリング: SampleRate → 16kHz, ステレオ → モノラル
         constexpr int32 TargetSampleRate = 16000;
         const int32 DownsampleRatio = FMath::Max(1, SampleRate / TargetSampleRate);
         const int32 OutputFrames = NumFrames / DownsampleRatio;
@@ -115,20 +118,15 @@ void AMyAudioStreamer::BeginPlay()
             PCM16[i] = static_cast<int16>(Sample * 32767.0f);
         }
 
-        SendQueue.Enqueue(MoveTemp(Buffer));
-        LastEnqueueTimeMs = FPlatformTime::Seconds() * 1000.0;
-
-        const double CallbackDurationMs = LastEnqueueTimeMs - CallbackStartMs;
-
-        // 計測ログ: 100回に1回 (音声レベル + コールバック処理時間)
+        // ログは MoveTemp の前に出力（Move後はBufferが空になるため）
         if (++CaptureCallbackCount % 100 == 0)
         {
-            float MaxSample = 0.0f;
-            int16* PCM16Debug = reinterpret_cast<int16*>(Buffer.GetData()); // ムーブ後なので再取得不可、近似値
             UE_LOG(LogTemp, Warning,
-                TEXT("[TIMING][UE] Capture callback #%d: %.2fms (Frames=%d SR=%d Ch=%d)"),
-                CaptureCallbackCount, CallbackDurationMs, OutputFrames, SampleRate, NumChannels);
+                TEXT("[TIMING][UE] Capture callback #%d (NumFrames=%d OutputFrames=%d OutputBytes=%d SR=%d Ch=%d)"),
+                CaptureCallbackCount, NumFrames, OutputFrames, Buffer.Num(), SampleRate, NumChannels);
         }
+
+        SendQueue.Enqueue(MoveTemp(Buffer));
     };
 
     // 16kHzで十分だが、デバイスのネイティブレートでキャプチャ
@@ -163,28 +161,34 @@ void AMyAudioStreamer::Tick(float DeltaTime)
         return;
     }
 
-    const double TickStartMs = FPlatformTime::Seconds() * 1000.0;
-    // キューに積まれた最後のバッファがどれくらい待ったか（近似値）
-    const double QueueWaitMs = (LastEnqueueTimeMs > 0.0) ? (TickStartMs - LastEnqueueTimeMs) : 0.0;
-
-    int32 ChunksSent = 0;
+    // --- キューに溜まった全チャンクを1つのバッファに結合して1回で送信 ---
+    // 個別に Send() すると WebSocket フレーミング + TCP オーバーヘッドが
+    // チャンク数分かかり、リアルタイム比が崩壊する原因になる
+    TArray<uint8> CombinedBuffer;
     TArray<uint8> Buffer;
+    int32 ChunksDequeued = 0;
     while (SendQueue.Dequeue(Buffer))
     {
-        WebSocket->Send(Buffer.GetData(), Buffer.Num(), true);
-        if (AudioDumpFile)
-        {
-            AudioDumpFile->Write(Buffer.GetData(), Buffer.Num());
-        }
-        ++ChunksSent;
+        CombinedBuffer.Append(Buffer);
+        ++ChunksDequeued;
     }
 
-    if (ChunksSent > 0)
+    if (CombinedBuffer.Num() > 0)
     {
-        const double SendDurationMs = FPlatformTime::Seconds() * 1000.0 - TickStartMs;
-        UE_LOG(LogTemp, Warning,
-            TEXT("[TIMING][UE] Tick: %d chunk(s) sent in %.2fms | QueueWait≈%.1fms | DeltaTime=%.1fms"),
-            ChunksSent, SendDurationMs, QueueWaitMs, DeltaTime * 1000.0f);
+        WebSocket->Send(CombinedBuffer.GetData(), CombinedBuffer.Num(), true);
+
+        if (AudioDumpFile)
+        {
+            AudioDumpFile->Write(CombinedBuffer.GetData(), CombinedBuffer.Num());
+        }
+
+        ++TickSendCount;
+        if (TickSendCount % 30 == 0)
+        {
+            UE_LOG(LogTemp, Warning,
+                TEXT("[TIMING][UE] Tick #%d: Combined %d chunks (%d bytes) into single send | DeltaTime=%.1fms"),
+                TickSendCount, ChunksDequeued, CombinedBuffer.Num(), DeltaTime * 1000.0f);
+        }
     }
 }
 
