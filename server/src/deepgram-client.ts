@@ -18,6 +18,7 @@ export class DeepgramSTTClient {
   private readonly apiKey: string;
   private readonly model: string;
   private readonly language: string;
+  private firstSendTs: number | null = null;
 
   constructor(options: DeepgramClientOptions) {
     this.apiKey = options.apiKey;
@@ -52,8 +53,12 @@ export class DeepgramSTTClient {
 
     this.connection.on(LiveTranscriptionEvents.Transcript, (data: any) => {
       const transcript = data.channel?.alternatives?.[0]?.transcript ?? "";
-      console.log(`[Deepgram] Transcript event: "${transcript}" is_final=${data.is_final} speech_final=${data.speech_final}`);
       if (transcript === "") return;
+
+      const fromFirstSend = this.firstSendTs != null
+        ? `+${(performance.now() - this.firstSendTs).toFixed(0)}ms`
+        : "?";
+      console.log(`[TIMING][Deepgram] Transcript ${fromFirstSend} from firstSend: "${transcript}" is_final=${data.is_final} speech_final=${data.speech_final}`);
 
       handlers.onTranscript({
         transcript,
@@ -75,6 +80,10 @@ export class DeepgramSTTClient {
 
   sendAudio(audioData: Buffer): void {
     if (this.connection) {
+      if (this.firstSendTs == null) {
+        this.firstSendTs = performance.now();
+        console.log(`[TIMING][Deepgram] First audio sent to Deepgram`);
+      }
       this.connection.send(audioData as unknown as ArrayBuffer);
     }
   }
@@ -83,6 +92,7 @@ export class DeepgramSTTClient {
     if (this.connection) {
       this.connection.finish();
       this.connection = null;
+      this.firstSendTs = null;
     }
   }
 }

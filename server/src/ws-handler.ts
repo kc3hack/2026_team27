@@ -14,6 +14,11 @@ interface SessionState {
   deepgram: DeepgramSTTClient;
   audioAnalyzer: AudioAnalyzer;
   finalSegments: string[];
+  // 計測用タイムスタンプ
+  firstAudioTs: number | null;
+  lastAudioTs: number | null;
+  firstInterimTs: number | null;
+  audioChunkCount: number;
 }
 
 export function handleWebSocket(
@@ -31,6 +36,10 @@ export function handleWebSocket(
     }),
     audioAnalyzer: new AudioAnalyzer(),
     finalSegments: [],
+    firstAudioTs: null,
+    lastAudioTs: null,
+    firstInterimTs: null,
+    audioChunkCount: 0,
   };
 
   const send = (msg: ServerMessage) => {
@@ -45,11 +54,20 @@ export function handleWebSocket(
     },
 
     onTranscript: async (result) => {
+      const now = performance.now();
       const { transcript, isFinal, speechFinal } = result;
 
       if (!isFinal) {
         // interim: テキスト転送のみ
         send({ type: "interim", text: transcript, ts: Date.now() });
+
+        // 計測: 最初の interim が来るまでの時間
+        if (!state.firstInterimTs) {
+          state.firstInterimTs = now;
+          const fromFirst = state.firstAudioTs != null ? (now - state.firstAudioTs).toFixed(0) : "?";
+          const fromLast  = state.lastAudioTs  != null ? (now - state.lastAudioTs).toFixed(0)  : "?";
+          console.log(`[TIMING][Server] First interim: +${fromFirst}ms from firstAudio, +${fromLast}ms from lastAudio`);
+        }
       }
 
       if (isFinal) {
@@ -58,15 +76,23 @@ export function handleWebSocket(
       }
 
       if (speechFinal) {
+        // 計測: speech_final が来るまでの時間（= endpointing 待機時間）
+        const fromLastAudio  = state.lastAudioTs  != null ? (now - state.lastAudioTs).toFixed(0)  : "?";
+        const fromFirstAudio = state.firstAudioTs != null ? (now - state.firstAudioTs).toFixed(0) : "?";
+        console.log(`[TIMING][Server] speech_final: +${fromLastAudio}ms from lastAudio (endpointing), +${fromFirstAudio}ms from firstAudio`);
+
         // speech_final: 全セグメント結合 → 1回だけ分類 → result送信
         const fullText = state.finalSegments.join("");
         const intensity = state.audioAnalyzer.getIntensity();
 
         if (fullText.length > 0) {
           try {
+            const classifyStart = performance.now();
             const { effects, debug } = await classifier.classify(fullText);
-            const effectTypes: EffectType[] = effects.map((e) => e.effect);
+            const classifyMs = (performance.now() - classifyStart).toFixed(0);
+            console.log(`[TIMING][Server] classify("${fullText}"): ${classifyMs}ms`);
 
+            const effectTypes: EffectType[] = effects.map((e) => e.effect);
             send({
               type: "result",
               data: {
@@ -78,6 +104,9 @@ export function handleWebSocket(
               debug,
               ts: Date.now(),
             });
+
+            const totalMs = state.firstAudioTs != null ? (performance.now() - state.firstAudioTs).toFixed(0) : "?";
+            console.log(`[TIMING][Server] Result sent. Total server latency: ${totalMs}ms from firstAudio`);
           } catch (err) {
             console.error("[ws-handler] classify error:", err);
             send({
@@ -96,6 +125,10 @@ export function handleWebSocket(
         // リセット
         state.finalSegments = [];
         state.audioAnalyzer.reset();
+        state.firstAudioTs = null;
+        state.lastAudioTs = null;
+        state.firstInterimTs = null;
+        state.audioChunkCount = 0;
       }
     },
 
@@ -111,10 +144,20 @@ export function handleWebSocket(
   let msgCount = 0;
   ws.on("message", (data, isBinary) => {
     msgCount++;
-    if (msgCount <= 5 || msgCount % 100 === 0) {
-      console.log(`[ws-handler] Message #${msgCount}: isBinary=${isBinary}, size=${(data as Buffer).length ?? 0}`);
-    }
     if (isBinary) {
+      const now = performance.now();
+      if (!state.firstAudioTs) {
+        state.firstAudioTs = now;
+        console.log(`[TIMING][Server] First audio chunk received (msg #${msgCount})`);
+      }
+      state.lastAudioTs = now;
+      state.audioChunkCount++;
+
+      if (state.audioChunkCount <= 3 || state.audioChunkCount % 50 === 0) {
+        const elapsed = (now - state.firstAudioTs).toFixed(0);
+        console.log(`[TIMING][Server] Audio chunk #${state.audioChunkCount}: +${elapsed}ms, size=${(data as Buffer).length}B`);
+      }
+
       const buffer = Buffer.from(data as ArrayBuffer);
       state.audioAnalyzer.addChunk(buffer);
       state.deepgram.sendAudio(buffer);

@@ -2,6 +2,7 @@
 #include "WebSocketsModule.h"
 #include "Json.h"
 #include "JsonUtilities.h"
+#include "HAL/PlatformFileManager.h"
 
 AMyAudioStreamer::AMyAudioStreamer()
 {
@@ -18,6 +19,12 @@ void AMyAudioStreamer::BeginPlay()
     WebSocket->OnConnected().AddLambda([]()
     {
         UE_LOG(LogTemp, Warning, TEXT("MyAudioStreamer: WebSocket connected!"));
+    });
+
+    WebSocket->OnClosed().AddLambda([this](int32 StatusCode, const FString& Reason, bool bWasClean)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("MyAudioStreamer: WebSocket closed (code=%d)"), StatusCode);
+        bServerReady = false;
     });
 
     WebSocket->OnConnectionError().AddLambda([](const FString& Error)
@@ -37,7 +44,12 @@ void AMyAudioStreamer::BeginPlay()
         {
             FString Type = JsonObject->GetStringField(TEXT("type"));
 
-            if (Type == TEXT("result"))
+            if (Type == TEXT("connected"))
+            {
+                bServerReady = true;
+                UE_LOG(LogTemp, Warning, TEXT("MyAudioStreamer: Server ready (Deepgram connected). Starting audio stream."));
+            }
+            else if (Type == TEXT("result"))
             {
                 const TSharedPtr<FJsonObject>* DataObj;
                 if (JsonObject->TryGetObjectField(TEXT("data"), DataObj))
@@ -79,6 +91,7 @@ void AMyAudioStreamer::BeginPlay()
 
     Audio::FOnCaptureFunction OnCapture = [this](const float* FloatData, int32 NumFrames, int32 NumChannels, int32 SampleRate, double StreamTime, bool bOverflow)
     {
+        const double CallbackStartMs = FPlatformTime::Seconds() * 1000.0;
 
         // ダウンサンプリング: SampleRate → 16kHz
         constexpr int32 TargetSampleRate = 16000;
@@ -102,20 +115,20 @@ void AMyAudioStreamer::BeginPlay()
             PCM16[i] = static_cast<int16>(Sample * 32767.0f);
         }
 
-        // デバッグ: 音声レベル
-        static int32 LogCounter = 0;
-        if (++LogCounter % 100 == 0)
+        SendQueue.Enqueue(MoveTemp(Buffer));
+        LastEnqueueTimeMs = FPlatformTime::Seconds() * 1000.0;
+
+        const double CallbackDurationMs = LastEnqueueTimeMs - CallbackStartMs;
+
+        // 計測ログ: 100回に1回 (音声レベル + コールバック処理時間)
+        if (++CaptureCallbackCount % 100 == 0)
         {
             float MaxSample = 0.0f;
-            for (int32 i = 0; i < OutputFrames; ++i)
-            {
-                MaxSample = FMath::Max(MaxSample, FMath::Abs(static_cast<float>(PCM16[i])));
-            }
-            UE_LOG(LogTemp, Warning, TEXT("AudioCapture: MaxSample=%f (of 32767) Frames=%d SR=%d Ch=%d"),
-                MaxSample, OutputFrames, SampleRate, NumChannels);
+            int16* PCM16Debug = reinterpret_cast<int16*>(Buffer.GetData()); // ムーブ後なので再取得不可、近似値
+            UE_LOG(LogTemp, Warning,
+                TEXT("[TIMING][UE] Capture callback #%d: %.2fms (Frames=%d SR=%d Ch=%d)"),
+                CaptureCallbackCount, CallbackDurationMs, OutputFrames, SampleRate, NumChannels);
         }
-
-        SendQueue.Enqueue(MoveTemp(Buffer));
     };
 
     // 16kHzで十分だが、デバイスのネイティブレートでキャプチャ
@@ -124,21 +137,54 @@ void AMyAudioStreamer::BeginPlay()
     AudioCapture.StartStream();
 
     UE_LOG(LogTemp, Warning, TEXT("MyAudioStreamer: AudioCapture stream started."));
+
+    // 音声バイナリダンプファイルを開く（上書き）
+    const FString DumpPath = TEXT("C:/Users/a7p7p/Downloads/TestFile");
+    AudioDumpFile = FPlatformFileManager::Get().GetPlatformFile().OpenWrite(*DumpPath, /*bAppend=*/false, /*bAllowRead=*/false);
+    if (AudioDumpFile)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("MyAudioStreamer: Audio dump file opened: %s"), *DumpPath);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("MyAudioStreamer: Failed to open audio dump file: %s"), *DumpPath);
+    }
 }
 
 void AMyAudioStreamer::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if (!WebSocket.IsValid() || !WebSocket->IsConnected())
+    if (!WebSocket.IsValid() || !WebSocket->IsConnected() || !bServerReady)
     {
+        // 未接続またはDeepgram未準備の間はキューを破棄（スタック防止）
+        TArray<uint8> Discarded;
+        while (SendQueue.Dequeue(Discarded)) {}
         return;
     }
 
+    const double TickStartMs = FPlatformTime::Seconds() * 1000.0;
+    // キューに積まれた最後のバッファがどれくらい待ったか（近似値）
+    const double QueueWaitMs = (LastEnqueueTimeMs > 0.0) ? (TickStartMs - LastEnqueueTimeMs) : 0.0;
+
+    int32 ChunksSent = 0;
     TArray<uint8> Buffer;
     while (SendQueue.Dequeue(Buffer))
     {
         WebSocket->Send(Buffer.GetData(), Buffer.Num(), true);
+        if (AudioDumpFile)
+        {
+            AudioDumpFile->Write(Buffer.GetData(), Buffer.Num());
+        }
+        ++ChunksSent;
+    }
+
+    if (ChunksSent > 0)
+    {
+        const double SendDurationMs = FPlatformTime::Seconds() * 1000.0 - TickStartMs;
+        UE_LOG(LogTemp, Warning,
+            TEXT("[TIMING][UE] Tick: %d chunk(s) sent in %.2fms | QueueWait≈%.1fms | DeltaTime=%.1fms"),
+            ChunksSent, SendDurationMs, QueueWaitMs, DeltaTime * 1000.0f);
     }
 }
 
@@ -162,5 +208,10 @@ void AMyAudioStreamer::EndPlay(const EEndPlayReason::Type EndPlayReason)
     AudioCapture.StopStream();
     AudioCapture.CloseStream();
     if (WebSocket.IsValid()) WebSocket->Close();
+    if (AudioDumpFile)
+    {
+        delete AudioDumpFile;
+        AudioDumpFile = nullptr;
+    }
     Super::EndPlay(EndPlayReason);
 }

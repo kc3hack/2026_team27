@@ -81,6 +81,16 @@ private:
     Audio::FAudioCapture AudioCapture;
     TQueue<TArray<uint8>> SendQueue;
 
+    // Deepgramが準備完了したか（サーバーから "connected" を受け取るまで音声送信しない）
+    bool bServerReady = false;
+
+    // 音声バイナリダンプ用ファイルハンドル
+    IFileHandle* AudioDumpFile = nullptr;
+
+    // 計測用
+    int32 CaptureCallbackCount = 0;
+    double LastEnqueueTimeMs = 0.0; // キャプチャスレッドが書き込み、Tickが読み取る（デバッグ用近似値）
+
     // サーバーの文字列をEnumに変換するヘルパー
     EEffectType StringToEffectType(FString EffectStr);
 };
