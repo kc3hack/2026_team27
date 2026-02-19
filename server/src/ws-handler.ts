@@ -33,6 +33,9 @@ export function handleWebSocket(
     finalSegments: [],
   };
 
+  let firstAudioTs = 0;  // 最初の音声チャンク受信時刻
+  const elapsed = () => firstAudioTs ? `+${Date.now() - firstAudioTs}ms` : "";
+
   const send = (msg: ServerMessage) => {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify(msg));
@@ -41,6 +44,7 @@ export function handleWebSocket(
 
   state.deepgram.connect({
     onOpen: () => {
+      console.log(`[ws-handler] Deepgram ready`);
       send({ type: "connected", message: "STT session started", ts: Date.now() });
     },
 
@@ -49,11 +53,13 @@ export function handleWebSocket(
 
       if (!isFinal) {
         // interim: テキスト転送のみ
+        console.log(`[ws-handler] ${elapsed()} interim: "${transcript}"`);
         send({ type: "interim", text: transcript, ts: Date.now() });
       }
 
       if (isFinal) {
         // is_final: 確定セグメントを蓄積
+        console.log(`[ws-handler] ${elapsed()} is_final: "${transcript}"`);
         state.finalSegments.push(transcript);
       }
 
@@ -61,12 +67,18 @@ export function handleWebSocket(
         // speech_final: 全セグメント結合 → 1回だけ分類 → result送信
         const fullText = state.finalSegments.join("");
         const intensity = state.audioAnalyzer.getIntensity();
+        const lastSpeech = state.audioAnalyzer.getLastSpeechTs();
+        const silenceToFinalMs = lastSpeech ? Date.now() - lastSpeech : -1;
+        console.log(`[ws-handler] ${elapsed()} speech_final: "${fullText}" (silence→final: ${silenceToFinalMs}ms)`);
 
         if (fullText.length > 0) {
           try {
+            const classifyStart = Date.now();
             const { effects, debug } = await classifier.classify(fullText);
+            const classifyMs = Date.now() - classifyStart;
             const effectTypes: EffectType[] = effects.map((e) => e.effect);
 
+            console.log(`[ws-handler] ${elapsed()} classify done (${classifyMs}ms): [${effectTypes}]`);
             send({
               type: "result",
               data: {
@@ -96,6 +108,7 @@ export function handleWebSocket(
         // リセット
         state.finalSegments = [];
         state.audioAnalyzer.reset();
+        firstAudioTs = 0;
       }
     },
 
@@ -115,6 +128,10 @@ export function handleWebSocket(
       console.log(`[ws-handler] Message #${msgCount}: isBinary=${isBinary}, size=${(data as Buffer).length ?? 0}`);
     }
     if (isBinary) {
+      if (!firstAudioTs) {
+        firstAudioTs = Date.now();
+        console.log(`[ws-handler] First audio chunk received`);
+      }
       const buffer = Buffer.from(data as ArrayBuffer);
       state.audioAnalyzer.addChunk(buffer);
       state.deepgram.sendAudio(buffer);
