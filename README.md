@@ -45,6 +45,10 @@
 
 ## 使用技術
 - UnrealEngine5.6.1
+- DEEPGR AM
+- ngrok
+- hugging face hub
+- Python
 
 <!--
 markdownの記法はこちらを参照してください！
