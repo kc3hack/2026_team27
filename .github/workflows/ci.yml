@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ex_develop, develop, main]
+    paths:
+      - "server/**"
+      - ".github/workflows/ci.yml"
+  push:
+    branches: [ex_develop, develop, main]
+    paths:
+      - "server/**"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  test:
+    name: Inference Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - name: Cache HuggingFace models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-models-${{ hashFiles('server/src/effect-classifier.ts') }}
+          restore-keys: hf-models-
+      - run: npm ci
+      - name: Run tests
+        run: npm test
+
+  docker:
+    name: Docker Build & Healthcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: server
+          load: true
+          tags: stt-server:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Start container
+        run: docker run -d --name stt-test -p 3001:3001 -e DEEPGRAM_API_KEY=dummy stt-server:test
+      - name: Wait for healthcheck
+        run: curl --retry 12 --retry-delay 10 --retry-all-errors http://localhost:3001/health
+      - name: Stop container
+        if: always()
+        run: docker stop stt-test || true

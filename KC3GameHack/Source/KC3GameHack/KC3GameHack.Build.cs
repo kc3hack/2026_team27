@@ -18,8 +18,14 @@ public class KC3GameHack : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
-		});
+			"Slate",
+            "AudioMixer",
+			"AudioCaptureCore",
+			"SignalProcessing",
+			"WebSockets",
+            "Json", 
+			"JsonUtilities"
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
