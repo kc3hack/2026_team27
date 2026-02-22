@@ -62,6 +62,10 @@ STTにはリアルタイム性を重視し、WebSocketベースのストリー�
 - Python (Transformers, SetFit)
 - Deepgram (Nova-3)
 
+
+[スライドはこちら](https://www.canva.com/design/DAHBxOFPETY/AYZBEqAU2obObIyGET4GpA/view?utm_content=DAHBxOFPETY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h39af16e069)
+
+
 <!--
 markdownの記法はこちらを参照してください！
 https://docs.github.com/ja/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
