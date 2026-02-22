@@ -14,7 +14,7 @@
 | 音声認識 | Deepgram (`@deepgram/sdk` v4) |
 | 音声認識モデル | nova-3 (日本語: `ja`) |
 | 属性判定 | `@huggingface/transformers` v3 (Transformers.js) |
-| Embedding モデル | `Xenova/multilingual-e5-small` (384次元, int8量子化) |
+| Embedding モデル | `sirasagi62/ruri-v3-30m-ONNX` (256次元, int8量子化, JMTEB 74.51) |
 | コンテナ | Docker + Docker Compose |
 | 公開 | ngrok (SSL終端 + トンネル) |
 
@@ -44,19 +44,19 @@ ngrok が SSL 終端とパブリック URL の発行を担う。Node.js は loca
 ### 仕組み
 
 **起動時 (1回のみ)**:
-1. `Xenova/multilingual-e5-small` モデルをロード (初回は HuggingFace Hub からダウンロード、以降キャッシュ)
-2. 各 EffectType に対して複数の代表フレーズの埋め込み (embedding) を計算
-3. フレーズ群の平均ベクトル (L2正規化済み) = そのEffectTypeの「重心 (centroid)」として保持
+1. `sirasagi62/ruri-v3-30m-ONNX` モデルをロード (fine-tuned モデルがあればそちらを優先)
+2. 各 EffectType に対して複数の代表フレーズ (exemplar) の埋め込み (embedding) を個別に計算・保持
+3. `data/training-data.json` があればその positive 例を exemplar として使用、なければデフォルトフレーズにフォールバック
 
 ```
-HEAT centroid = normalize(mean(embed("熱い"), embed("燃えている"), embed("炎のように熱い"), ...))
-COLD centroid = normalize(mean(embed("冷たい"), embed("凍りそう"), embed("氷みたいに冷たい"), ...))
+HEAT exemplars = [embed("熱い"), embed("燃えている"), embed("炎のように熱い"), ...]
+COLD exemplars = [embed("冷たい"), embed("凍りそう"), embed("氷みたいに冷たい"), ...]
 ...
 ```
 
 **ランタイム (各発話)**:
 1. 入力テキストの埋め込みを計算 (~15-60ms)
-2. 全 EffectType centroid とのコサイン類似度を計算 (<1ms)
+2. 全 EffectType の全 exemplar とのコサイン類似度を計算し、各属性の MAX スコアを採用 (kNN, k=1) (<1ms)
 3. 動的閾値による外れ値検出で効果を抽出
 4. 排他ペアは信頼度 (similarity score) が高い方を採用
 
@@ -182,7 +182,7 @@ ws://<host>/ws/stt
 }
 ```
 
-`debug` フィールドは開発時の分類パラメータ確認用。全centroidとのスコア分布、動的閾値、分類所要時間を含む。
+`debug` フィールドは開発時の分類パラメータ確認用。全属性の MAX exemplar スコア分布、動的閾値、分類所要時間を含む。
 
 #### 4. エラー
 
@@ -272,9 +272,12 @@ server/
 │   ├── index.ts              # エントリポイント (HTTP + WebSocket)
 │   ├── ws-handler.ts         # WebSocket 接続ハンドラ
 │   ├── deepgram-client.ts    # Deepgram STT クライアント
-│   ├── effect-classifier.ts  # Embedding ベース属性判定 (動的閾値)
+│   ├── effect-classifier.ts  # Embedding ベース属性判定 (kNN + 動的閾値)
 │   ├── audio-analyzer.ts     # 音声強度 (RMS) 計算
 │   └── types.ts              # 型定義
+├── data/
+│   └── training-data.json         # 訓練データ (gitignored)
+├── models/                        # fine-tuned ONNX モデル出力 (gitignored)
 ├── Dockerfile
 ├── docker-compose.yml
 ├── test-client.html          # ブラウザ用テストクライアント
