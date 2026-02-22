@@ -1,7 +1,13 @@
 """
-SetFit fine-tuning for effect classifier (v2).
+SetFit fine-tuning for effect classifier (v3).
 
-第1回の欠陥を修正:
+v2 からの変更:
+  - カタカナ造語の形態変化バリアントを training-data.json に追加
+  - サブワード正則化: SentencePiece sampling で同一テキストの異なる
+    トークン分割を生成し、デコード結果を追加の訓練データとして投入
+    (Kudo 2018, Provilkov et al. 2020)
+
+v2:
   - "none" クラスを訓練に含める (OOS rejection の学習)
   - CoSENTLoss に変更 (CosineSimilarityLoss より強い学習シグナル)
   - num_iterations=20→8 (過学習抑制)
@@ -60,13 +66,47 @@ def check_resources():
         sys.exit(1)
 
 
-def load_training_data():
-    """訓練データを読み込み、train/val に分割して返す。
+def subword_augment(texts: list[str], labels: list[int], n_samples: int = 3,
+                     alpha: float = 0.3) -> tuple[list[str], list[int]]:
+    """SentencePiece sampling によるサブワード正則化データ拡張。
 
-    第1回からの変更:
-    - is_positive=false の例を "none" クラスとして訓練に含める
-    - 20% を validation に分割
+    同一テキストに対して異なるサブワード分割を生成し、
+    デコードした結果を追加の訓練データとして返す。
+    これにより、モデルが特定のトークン分割に依存しない表現を学習する。
+
+    Args:
+        texts: 元テキスト列
+        labels: 元ラベル列
+        n_samples: テキストあたりの拡張サンプル数
+        alpha: SentencePiece sampling の温度 (低いほど多様)
     """
+    from transformers import AutoTokenizer
+    import sentencepiece as spm
+
+    # slow tokenizer 経由で sp_model を取得
+    tok = AutoTokenizer.from_pretrained(BASE_MODEL, use_fast=False)
+    sp: spm.SentencePieceProcessor = tok.sp_model
+
+    aug_texts, aug_labels = [], []
+    seen = set(texts)  # 重複排除
+
+    for text, label in zip(texts, labels):
+        for _ in range(n_samples):
+            # sampling モードで異なるサブワード分割を生成
+            pieces = sp.encode(text, out_type=str,
+                               enable_sampling=True, alpha=alpha, nbest_size=-1)
+            decoded = "".join(p.lstrip("▁") for p in pieces)
+            # デコード結果が元と異なり、かつ未見の場合のみ追加
+            if decoded != text and decoded not in seen:
+                seen.add(decoded)
+                aug_texts.append(decoded)
+                aug_labels.append(label)
+
+    return aug_texts, aug_labels
+
+
+def load_training_data():
+    """訓練データを読み込み、サブワード正則化で拡張し、train/val に分割して返す。"""
     from datasets import Dataset
 
     if not DATA_PATH.exists():
@@ -96,10 +136,24 @@ def load_training_data():
                 texts.append(ex["text"])
                 labels.append(label_to_id["none"])
 
-    # クラス別集計
+    # クラス別集計 (拡張前)
     from collections import Counter
     counts = Counter(labels)
     print(f"Loaded {len(texts)} examples, {len(all_labels)} labels (incl. 'none')")
+    for label, lid in sorted(label_to_id.items(), key=lambda x: x[1]):
+        print(f"  {label}: {counts.get(lid, 0)} examples")
+
+    # サブワード正則化によるデータ拡張 (positive 例のみ)
+    pos_texts = [t for t, l in zip(texts, labels) if l != label_to_id["none"]]
+    pos_labels = [l for l in labels if l != label_to_id["none"]]
+    aug_texts, aug_labels = subword_augment(pos_texts, pos_labels, n_samples=3, alpha=0.3)
+    print(f"Subword augmentation: +{len(aug_texts)} examples")
+    texts.extend(aug_texts)
+    labels.extend(aug_labels)
+
+    # クラス別集計 (拡張後)
+    counts = Counter(labels)
+    print(f"Total after augmentation: {len(texts)} examples")
     for label, lid in sorted(label_to_id.items(), key=lambda x: x[1]):
         print(f"  {label}: {counts.get(lid, 0)} examples")
 

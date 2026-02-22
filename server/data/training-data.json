@@ -1356,6 +1356,541 @@
       "is_positive": true
     },
     {
+      "text": "フレイムバースト",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "インフェルノ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "バーニング",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ヘルファイア",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フレアブラスト",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "エクスプロージョン",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ボルケーノ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "ブリザード",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "アイスエイジ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フロストバイト",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "ダイヤモンドダスト",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "コキュートス",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "アブソリュートゼロ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "エターナルフォースブリザード",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "ライトニングボルト",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "サンダーストーム",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "エレクトロショック",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "ボルテッカー",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "プラズマバースト",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "ギガボルト",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "ホーリーライト",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "シャイニングフラッシュ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ルミナス",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "レイオブライト",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ブリリアンス",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ソーラービーム",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "スリップストリーム",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "アイスグラウンド",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "オイルスリック",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "ゼロフリクション",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スプリングバウンド",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "リバウンド",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "トランポリンジャンプ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "エラスティック",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "グラビティプレス",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "メガトンハンマー",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ヘビーインパクト",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "グランドスラム",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ゼログラビティ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "レビテーション",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "フェザーフロート",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "エアリアル",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ソニックブーム",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ハイパーダッシュ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ブーストアクセル",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "マッハスピード",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ラピッドストライク",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "タイムフリーズ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "グラビティバインド",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "スロウダウン",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ヘヴィチェイン",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "バーン",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "バーンアウト",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "インファナル",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "インファーノ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "インフェルナル",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フレイミング",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "イグナイト",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "イグニッション",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フリージング",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フローズン",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フリーザー",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フロスト",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フロスティ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "フロステッド",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "アイシー",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "アイシクル",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "サンダラ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "サンダガ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "サンダリング",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "エレクトリック",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "エレクトリカル",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "ボルテージ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "シャイン",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "シャイニー",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "シャイニング",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ルミネ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ルミネセンス",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ルミナリエ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ブライト",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "ブライトネス",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "スリッピー",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スリッパリー",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スライド",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "スライディング",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンシー",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンシング",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "リバウンド",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "スプリンギー",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "グラビトン",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "グラビテーション",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "ヘヴィネス",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "メガトニック",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "レビテート",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "レビテイト",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "レビテーティング",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "フローティング",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ウェイトレス",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ラピッド",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "ラピダス",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スーパーソニック",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "アクセラレーション",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "アクセラレート",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スロウ",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "スロウネス",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "スローイング",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "ディセラレーション",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
       "text": "こんにちは",
       "label": "heat",
       "is_positive": false
@@ -3604,6 +4139,206 @@
       "text": "もういい",
       "label": "speed_slow",
       "is_positive": false
+    },
+    {
+      "text": "フレイムブラスト",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フロストブラスト",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "サンダーブラスト",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "シャインブラスト",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "スリップブラスト",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンスブラスト",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "メガトンブラスト",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "フェザーブラスト",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ソニックブラスト",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スロウブラスト",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "フレイムストライク",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フロストストライク",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "サンダーストライク",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "シャインストライク",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "スリップストライク",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンスストライク",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "メガトンストライク",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "フェザーストライク",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ソニックストライク",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スロウストライク",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "フレイムブレード",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フロストブレード",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "サンダーブレード",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "シャインブレード",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "スリップブレード",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンスブレード",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "メガトンブレード",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "フェザーブレード",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ソニックブレード",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スロウブレード",
+      "label": "speed_slow",
+      "is_positive": true
+    },
+    {
+      "text": "フレイムウェーブ",
+      "label": "heat",
+      "is_positive": true
+    },
+    {
+      "text": "フロストウェーブ",
+      "label": "cold",
+      "is_positive": true
+    },
+    {
+      "text": "サンダーウェーブ",
+      "label": "electric",
+      "is_positive": true
+    },
+    {
+      "text": "シャインウェーブ",
+      "label": "light",
+      "is_positive": true
+    },
+    {
+      "text": "スリップウェーブ",
+      "label": "friction_reduce",
+      "is_positive": true
+    },
+    {
+      "text": "バウンスウェーブ",
+      "label": "bounce",
+      "is_positive": true
+    },
+    {
+      "text": "メガトンウェーブ",
+      "label": "mass_heavy",
+      "is_positive": true
+    },
+    {
+      "text": "フェザーウェーブ",
+      "label": "mass_light",
+      "is_positive": true
+    },
+    {
+      "text": "ソニックウェーブ",
+      "label": "speed_fast",
+      "is_positive": true
+    },
+    {
+      "text": "スロウウェーブ",
+      "label": "speed_slow",
+      "is_positive": true
     }
   ]
 }
