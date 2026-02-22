@@ -22,6 +22,8 @@ const BASE_Z_THRESHOLD = 1.5;
 const BASE_MIN_GAP = 0.03;
 const FINETUNED_Z_THRESHOLD = 2.0;
 const FINETUNED_MIN_GAP = 0.05;
+// 絶対類似度の下限: z-score 閾値を超えていても、この値以下なら不採用
+const SIMILARITY_FLOOR = 0.75;
 
 // 各EffectTypeの代表フレーズ (フォールバック用)
 const EFFECT_PHRASES: Record<EffectType, string[]> = {
@@ -247,7 +249,7 @@ export class EffectClassifier {
     }));
 
     let effects = rawScores
-      .filter((s) => s.similarity > dynamicThreshold)
+      .filter((s) => s.similarity > dynamicThreshold && s.similarity >= SIMILARITY_FLOOR)
       .map((s) => ({ effect: s.effect, confidence: s.similarity }));
 
     effects = this.applyExclusivePairs(effects);
